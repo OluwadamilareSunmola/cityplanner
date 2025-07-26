@@ -31,7 +31,7 @@ ticketmaster_event = {
 venue = ticketmaster_event.get('_embedded', {}).get('venues', [{}])[0]
 location = venue.get('location', {})
 
-# extract location
+# extract location from ticketmaster event
 event_location = geo.EventLocation(name=venue.get('name', 'Unknown Venue'),
             lat=float(location.get('latitude', 0)),
             lon=float(location.get('longitude', 0)),
