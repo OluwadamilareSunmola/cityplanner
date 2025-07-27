@@ -1,27 +1,177 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Sidebar from '../components/Sidebar.jsx';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Sidebar from "../components/Sidebar.jsx";
 
 function Home() {
-    const [events, setEvents] = useState({
-    "1": { name: "Concert", location: "El Paso", time: "7 PM" },
-    "2": { name: "Art Show", location: "Las Cruces", time: "3 PM" },
-    "3": { name: "Tech Meetup", location: "UTEP", time: "6 PM" },
+  const [events, setEvents] = useState({
+    1: {
+      name: "Coldplay",
+      type: "music",
+      genre: "rock",
+      description:
+        "See Coldplay live on their Music of the Spheres Tour, featuring special guests and unforgettable performances.",
+      location: "El Paso",
+      address: "Sun Bowl Stadium",
+      time: "2025-08-15",
+    },
+    2: {
+      name: "Basketball Finals",
+      type: "sports",
+      genre: "n/a",
+      description: "Witness the ultimate basketball showdown this season.",
+      location: "El Paso",
+      address: "Don Haskins Center",
+      time: "2025-09-10",
+    },
+    3: {
+      name: "Shakespeare in the Park",
+      type: "theater",
+      genre: "classical",
+      description: "Enjoy a magical evening of live theater under the stars.",
+      location: "El Paso",
+      address: "Memorial Park",
+      time: "2025-07-30",
+    },
+    4: {
+      name: "Comedy Night",
+      type: "other",
+      genre: "comedy",
+      description: "Laugh the night away with top stand-up comedians.",
+      location: "El Paso",
+      address: "Comic Club",
+      time: "2025-12-01",
+    },
+  });
+
+  const [filters, setFilters] = useState({
+    text: "",
+    type: "",
+    genre: "",
+    time: "",
+  });
+
+  const [savedEvents, setSavedEvents] = useState({});
+
+  const handleSaveEvent = (id) => {
+    setSavedEvents((prev) => ({
+      ...prev,
+      [id]: events[id],
+    }));
+  };
+
+  const filteredEvents = Object.entries(events).filter(([id, event]) => {
+    const search = filters.text.toLowerCase();
+
+    const matchesSearch =
+      search === "" ||
+      event.name.toLowerCase().includes(search) ||
+      event.description.toLowerCase().includes(search) ||
+      event.location.toLowerCase().includes(search) ||
+      event.type.toLowerCase().includes(search) ||
+      event.address.toLowerCase().includes(search);
+
+    const matchesType = filters.type === "" || event.type === filters.type;
+    const matchesGenre = filters.genre === "" || event.genre === filters.genre;
+    const matchesTime =
+      filters.time === "" || isInTimeRange(event.time, filters.time);
+
+    return matchesSearch && matchesType && matchesGenre && matchesTime;
   });
 
   return (
-    <div className='wrapper-home'>
-      <Sidebar/>
-      <div className="container">
-      {/* Step 2: Render one block per entry */}
-      {Object.entries(events).map(([id, event]) => (
-        <div key={id} className="event-block">
-          <h3>{event.name}</h3>
-          <p><strong>Location:</strong> {event.location}</p>
-          <p><strong>Time:</strong> {event.time}</p>
+    <div className="wrapper-home">
+      <Sidebar />
+      <div className="container-form">
+        <div className="filter-section">
+          <h2 className="title">Find Events</h2>
+          <input
+            type="text"
+            placeholder="Search..."
+            value={filters.text}
+            onChange={(e) => setFilters({ ...filters, text: e.target.value })}
+          />
+          <form
+            className="event-filter-form"
+            onSubmit={(e) => e.preventDefault()}
+          >
+            <label htmlFor="event-type">Type</label>
+            <select
+              id="event-type"
+              name="type"
+              value={filters.type}
+              onChange={(e) => setFilters({ ...filters, type: e.target.value })}
+            >
+              <option value="">-- Select Type --</option>
+              <option value="music">Music</option>
+              <option value="sports">Sports</option>
+              <option value="theater">Theater</option>
+              <option value="other">Other</option>
+            </select>
+
+            <label htmlFor="genre">Genre</label>
+            <select
+              id="genre"
+              name="genre"
+              value={filters.genre}
+              onChange={(e) =>
+                setFilters({ ...filters, genre: e.target.value })
+              }
+            >
+              <option value="">-- Select Genre --</option>
+              <option value="rock">Rock</option>
+              <option value="hiphop">Hip-Hop</option>
+              <option value="classical">Classical</option>
+              <option value="comedy">Comedy</option>
+            </select>
+
+            <label htmlFor="time-range">When</label>
+            <select
+              id="time-range"
+              name="time"
+              value={filters.time}
+              onChange={(e) => setFilters({ ...filters, time: e.target.value })}
+            >
+              <option value="">-- Select Time Range --</option>
+              <option value="month">This Month</option>
+              <option value="6months">Next 6 Months</option>
+              <option value="year">Next Year</option>
+            </select>
+          </form>
         </div>
-      ))}
-    </div>
+
+        <div className="info">
+          {filteredEvents.length === 0 ? (
+            <p>No events found.</p>
+          ) : (
+            filteredEvents.map(([id, event]) => (
+              <div key={id} className="event-block">
+                <h3>{event.name}</h3>
+                <p>
+                  <strong>Description:</strong> {event.description}
+                </p>
+                <ul>
+                  <p>
+                    <strong>Location:</strong> {event.location}
+                  </p>
+                  <p>
+                    <strong>Type:</strong> {event.type}
+                  </p>
+                  <p>
+                    <strong>Genre:</strong> {event.genre}
+                  </p>
+                  <p>
+                    <strong>Time:</strong> {event.time}
+                  </p>
+                  <p>
+                    <strong>Address:</strong> {event.address}
+                  </p>
+                </ul>
+                <button onClick={() => handleSaveEvent(id)}>Add</button>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
     </div>
   );
 }

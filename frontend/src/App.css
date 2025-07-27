@@ -32,6 +32,7 @@
   margin-bottom: 1rem;
   border-radius: 5px;
   border: 1px solid #ccc;
+
 }
 
 .wrapper-login button {
@@ -75,10 +76,12 @@
 .sidebar {
   width: 200px;
   height: 100vh;
+  margin: none;
+  border: none;
   background-color: #FEA82F;
   color: black;
-  padding: 1rem;
-  position: relative;
+  padding: 0 1.5rem ;
+  position: fixed;
   top: 0;
   left: 0;
 }
@@ -109,21 +112,61 @@
 
 .wrapper-home{
   display: flex;
-  flex-wrap: wrap;
+  height: 100vh;
 }
 
-.container {
-  position: relative;
+.container-form{
+  width: calc(100% - 248px);
+  display: flex;
+  margin-left: 248px;
+  justify-content: center;
+}
+
+.filter-section{
+  width: calc(100% - 282px);
+  position: fixed;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: #FFF3E2;
+  padding: 1rem;
+}
+
+.info{
+  width: 100%;
+  margin-top: 10rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin: 1rem;
+  align-items: center;
 }
 
-.event-block {
-  background-color: #ffffff;
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 200px;
+.event-block{
+  background-color: white;
+  width: 60%;
+  margin-bottom: 1rem;
+  border-radius:  10px;
+  box-shadow: rgb(199, 199, 199) 2px 2px 10px;
+}
+
+.event-block ul{
+  display: flex;
+  padding: 0px
+}
+
+.event-block h3{
+  margin-left:1.5rem;
+}
+
+
+.event-block p{
+  margin-left: 1.5rem;
+}
+.event-block ul p{
+  padding:  0px;
+  margin: 0px;
+  margin-left: 1.5rem;
+}
+
+.event-block button{
+  margin: 0 0 1rem 1.5rem;
 }
