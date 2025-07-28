@@ -180,7 +180,7 @@ function Home() {
                     <strong>Address:</strong> {event.address}
                   </p>
                 </ul>
-                <button onClick={() => handleSaveEvent(id)}>Add</button>
+                <button className="w-17 h-9 text-md font-bold rounded-lg" onClick={() => handleSaveEvent(id)}>Add</button>
               </div>
             ))
           )}
