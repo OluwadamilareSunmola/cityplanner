@@ -28,11 +28,8 @@
 
 .wrapper-login input {
   width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
   border-radius: 5px;
-  border: 1px solid #ccc;
-
+  border: 0px solid #ccc;
 }
 
 .wrapper-login button {

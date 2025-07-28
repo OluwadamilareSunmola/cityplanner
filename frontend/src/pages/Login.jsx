@@ -60,6 +60,7 @@ function Login() {
       <h2 className="text-4xl text-center">Sign in</h2>
         <label>Email</label>
         <input
+        className="mb-[1rem] px-0 py-[.8rem]"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -67,13 +68,14 @@ function Login() {
 
         <label>Password</label>
         <input
+          className="mb-[1.5rem] px-0 py-[.8rem]"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
         <button
-        className="my-[0.3rem] rounded-md p-[0.9rem]"
+        className="my-[0.3rem] rounded-md p-[0.8rem]"
           onClick={(e) => {
             e.preventDefault();
             handleLogin();
@@ -83,11 +85,11 @@ function Login() {
         </button>
 
         <button
-        className="my-[0.3rem] rounded-md p-[0.9rem]" 
+        className="my-[0.3rem] rounded-md p-[0.8rem]" 
         onClick={loginWithGoogle}>Sign In with Google</button>
 
         <button
-        className="my-[0.3rem] rounded-md p-[0.9rem]"
+        className="my-[0.3rem] rounded-md p-[0.8rem]"
           type="button"
           onClick={() => navigate("/signup")}
         >
