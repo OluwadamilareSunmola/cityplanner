@@ -73,7 +73,7 @@ function Login() {
         />
 
         <button
-        className="my-1 rounded-md"
+        className="my-[0.3rem] rounded-md p-[0.9rem]"
           onClick={(e) => {
             e.preventDefault();
             handleLogin();
@@ -83,11 +83,11 @@ function Login() {
         </button>
 
         <button
-        className="my-1 rounded-md" 
+        className="my-[0.3rem] rounded-md p-[0.9rem]" 
         onClick={loginWithGoogle}>Sign In with Google</button>
 
         <button
-        className="my-1 rounded-md"
+        className="my-[0.3rem] rounded-md p-[0.9rem]"
           type="button"
           onClick={() => navigate("/signup")}
         >
