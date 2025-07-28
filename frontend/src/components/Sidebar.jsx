@@ -10,7 +10,7 @@ function Sidebar() {
 
   return (
     <div className="sidebar">
-      <h2 className="sidebar-title">CityPulse</h2>
+      <h2 className="sidebar-title ml-[0.5rem]">CityPulse</h2>
       <nav className="sidebar-nav">
         <div className="sidebar-link" onClick={() => navigate('/home')}>Home</div>
         <div className="sidebar-link" onClick={() => navigate('/map')}>Map</div>
