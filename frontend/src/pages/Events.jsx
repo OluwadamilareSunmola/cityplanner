@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar.jsx";
 
-function Home() {
+function Events() {
+  const navigate = useNavigate()
   const [events, setEvents] = useState({
     1: {
       name: "Coldplay",
@@ -13,7 +14,7 @@ function Home() {
       location: "El Paso",
       address: "Sun Bowl Stadium",
       time: "2025-08-15",
-    }
+    },
   });
 
   const [filters, setFilters] = useState({
@@ -24,6 +25,7 @@ function Home() {
   });
 
   const [savedEvents, setSavedEvents] = useState({});
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const handleSaveEvent = (id) => {
     setSavedEvents((prev) => ({
@@ -117,7 +119,7 @@ function Home() {
             <p>No events found.</p>
           ) : (
             filteredEvents.map(([id, event]) => (
-              <div key={id} className="event-block">
+              <div key={id} className="event-block" onClick={() => setSelectedEvent(event)}>
                 <h3>{event.name}</h3>
                 <p>
                   <strong>Description:</strong> {event.description}
@@ -139,6 +141,7 @@ function Home() {
                     <strong>Address:</strong> {event.address}
                   </p>
                 </ul>
+                <button onClick={() => navigate("/details")}>Plan</button>
               </div>
             ))
           )}
@@ -148,4 +151,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Events;
