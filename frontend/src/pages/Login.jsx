@@ -56,9 +56,8 @@ function Login() {
 
   return (
     <div className="wrapper-login">
-      <form>
-        <h2>Login</h2>
-
+      <form>  
+      <h2 className="text-4xl text-center">Sign in</h2>
         <label>Email</label>
         <input
           type="email"
@@ -74,6 +73,7 @@ function Login() {
         />
 
         <button
+        className="my-1 rounded-md"
           onClick={(e) => {
             e.preventDefault();
             handleLogin();
@@ -82,9 +82,12 @@ function Login() {
           Log In
         </button>
 
-        <button onClick={loginWithGoogle}>Sign In with Google</button>
+        <button
+        className="my-1 rounded-md" 
+        onClick={loginWithGoogle}>Sign In with Google</button>
 
         <button
+        className="my-1 rounded-md"
           type="button"
           onClick={() => navigate("/signup")}
         >
