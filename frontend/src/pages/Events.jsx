@@ -1,21 +1,37 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar.jsx";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { auth, db } from "../firebase";
+import { getDocs, collection } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
 function Events() {
+  const [savedEvents, setSavedEvents] = useState({});
+  const [events, setEvents] = useState({});
   const navigate = useNavigate()
-  const [events, setEvents] = useState({
-    1: {
-      name: "Coldplay",
-      type: "music",
-      genre: "rock",
-      description:
-        "See Coldplay live on their Music of the Spheres Tour, featuring special guests and unforgettable performances.",
-      location: "El Paso",
-      address: "Sun Bowl Stadium",
-      time: "2025-08-15",
-    },
-  });
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) return;
+
+      try {
+        const querySnapshot = await getDocs(
+          collection(db, "users", user.uid, "savedEvents")
+        );
+
+        const eventsData = {};
+        querySnapshot.forEach((doc) => {
+          eventsData[doc.id] = doc.data();
+        });
+
+        setEvents(eventsData);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const [filters, setFilters] = useState({
     text: "",
@@ -23,16 +39,6 @@ function Events() {
     genre: "",
     time: "",
   });
-
-  const [savedEvents, setSavedEvents] = useState({});
-  const [selectedEvent, setSelectedEvent] = useState(null);
-
-  const handleSaveEvent = (id) => {
-    setSavedEvents((prev) => ({
-      ...prev,
-      [id]: events[id],
-    }));
-  };
 
   const filteredEvents = Object.entries(events).filter(([id, event]) => {
     const search = filters.text.toLowerCase();
@@ -119,7 +125,11 @@ function Events() {
             <p>No events found.</p>
           ) : (
             filteredEvents.map(([id, event]) => (
-              <div key={id} className="event-block" onClick={() => setSelectedEvent(event)}>
+              <div
+                key={id}
+                className="event-block"
+                onClick={() => setSelectedEvent(event)}
+              >
                 <h3>{event.name}</h3>
                 <p>
                   <strong>Description:</strong> {event.description}
@@ -141,7 +151,11 @@ function Events() {
                     <strong>Address:</strong> {event.address}
                   </p>
                 </ul>
-                <button onClick={() => navigate("/details")}>Plan</button>
+                <button
+                  onClick={() => navigate("/details", { state: { event } })}
+                >
+                  Plan
+                </button>
               </div>
             ))
           )}

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { auth, db } from "../firebase";
+import { addDoc, collection } from "firebase/firestore";
 import Sidebar from "../components/Sidebar.jsx";
 
 function Home() {
@@ -43,21 +45,44 @@ function Home() {
     },
   });
 
+  const [name, setName] = useState("");
+  const [tyoe, setPosition] = useState("");
+  const [genre, setGenre] = useState("Apply");
+  const [desctiprion, setDescription] = useState("");
+  const [location, setLocation] = useState("");
+  const [address, setAddress] = useState("");
+  const [time, setTime] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSaveEvent = async (id) => {
+  const user = auth.currentUser;
+  if (!user) {
+    alert("Please log in to save events.");
+    return;
+  }
+
+  const selectedEvent = events[id];
+
+  try {
+    await addDoc(collection(db, "users", user.uid, "savedEvents"), {
+      ...selectedEvent,
+      savedAt: new Date()
+    });
+
+    alert("Event saved!");
+  } catch (error) {
+    console.error("Error saving event:", error);
+    alert("Failed to save event.");
+  }
+};
+
   const [filters, setFilters] = useState({
     text: "",
     type: "",
     genre: "",
     time: "",
   });
-
-  const [savedEvents, setSavedEvents] = useState({});
-
-  const handleSaveEvent = (id) => {
-    setSavedEvents((prev) => ({
-      ...prev,
-      [id]: events[id],
-    }));
-  };
 
   const filteredEvents = Object.entries(events).filter(([id, event]) => {
     const search = filters.text.toLowerCase();
