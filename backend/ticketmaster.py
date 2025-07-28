@@ -2,11 +2,13 @@ import os
 import requests
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 # Load environment variables from .env file
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 
 # Read API key from environment
 API_KEY = os.getenv("TICKETMASTER_API_KEY")
@@ -47,13 +49,15 @@ def search():
             try:
                 venue = e["_embedded"]["venues"][0]
                 events.append({
-                    "name": e["name"],
-                    "url": e["url"],
-                    "datetime": e["dates"]["start"].get("dateTime", "TBD"),
-                    "venue": venue.get("name", "Unknown"),
-                    "lat": float(venue["location"]["latitude"]),
-                    "lng": float(venue["location"]["longitude"])
-                })
+                "name": e.get("name", "Unknown"),
+                "url": e.get("url", None),
+                "datetime": e.get("dates", {}).get("start", {}).get("dateTime", "TBD"),
+                "venue": venue.get("name", "Unknown"),
+                "lat": float(venue.get("location", {}).get("latitude", 0.0)) if "location" in venue and "latitude" in venue["location"] else None,
+                "lng": float(venue.get("location", {}).get("longitude", 0.0)) if "location" in venue and "longitude" in venue["location"] else None,
+                "distance": e.get("distance")
+            })
+
             except (KeyError, IndexError, ValueError) as parse_error:
                 print(f"Skipping event due to parse error: {parse_error}")
                 continue
@@ -85,7 +89,7 @@ def geo_search():
         "latlong": latlong,
         "radius": radius,
         "unit": unit,
-        "size": 10,
+        "size": 50,
         "sort": "date,asc"
     }
 
@@ -103,14 +107,15 @@ def geo_search():
             try:
                 venue = e["_embedded"]["venues"][0]
                 events.append({
-                    "name": e["name"],
-                    "url": e["url"],
-                    "datetime": e["dates"]["start"].get("dateTime", "TBD"),
-                    "venue": venue.get("name", "Unknown"),
-                    "lat": float(venue["location"]["latitude"]) if "location" in venue and "latitude" in venue["location"] else None,
-                    "lng": float(venue["location"]["longitude"]) if "location" in venue and "longitude" in venue["location"] else None,
-                    "distance": e.get("distance")
-                })
+                "name": e.get("name", "Unknown"),
+                "url": e.get("url", None),
+                "datetime": e.get("dates", {}).get("start", {}).get("dateTime", "TBD"),
+                "venue": venue.get("name", "Unknown"),
+                "lat": float(venue.get("location", {}).get("latitude", 0.0)) if "location" in venue and "latitude" in venue["location"] else None,
+                "lng": float(venue.get("location", {}).get("longitude", 0.0)) if "location" in venue and "longitude" in venue["location"] else None,
+                "distance": e.get("distance")
+            })
+
             except (KeyError, IndexError, ValueError) as parse_error:
                 print(f"Skipping event due to parse error: {parse_error}")
                 continue
