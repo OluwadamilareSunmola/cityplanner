@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar.jsx";
+import MapComponent from "../components/MapComponent.jsx";
 
 function EventDetails() {
     const navigate = useNavigate()
@@ -27,7 +28,9 @@ function EventDetails() {
             </div>
           </div>
           <div className="map">
-            <img src="https://res.cloudinary.com/freshis/image/upload/v1649685993/mango_6f4f04bff3.jpg"></img>
+              <MapComponent />
+              {/* mango */}
+              {/* <img src="https://res.cloudinary.com/freshis/image/upload/v1649685993/mango_6f4f04bff3.jpg" alt="Mango" /> */}
           </div>
         </div>
       </div>

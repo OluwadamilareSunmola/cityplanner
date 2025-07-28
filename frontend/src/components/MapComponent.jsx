@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 
 export default function MapComponent() {
   return <>
-    <MapContainer center={[40.7128, -74.0060]} zoom={13} style={{ height: '100vh', width: '100%' }}>
+    <MapContainer center={[40.7128, -74.0060]} zoom={13} style={{ height: '100%', width: '100%' }}>
       <TileLayer
     url={`https://api.maptiler.com/maps/outdoor-v2/{z}/{x}/{y}.png?key=${import.meta.env.VITE_MAPTILER_API_KEY}`}
     attribution='© MapTiler © OpenStreetMap contributors'
