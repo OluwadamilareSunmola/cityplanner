@@ -13,11 +13,8 @@ app = Flask(__name__)
 CORS(app)
 
 # Read API key from environment
-API_KEY = os.getenv("TICKETMASTER_API_KEY")
+TICKETMASTER_API_KEY = os.getenv("TICKETMASTER_API_KEY")
 GEOAPIFY_API_KEY = os.getenv("GEOAPIFY_API_KEY")
-
-if not API_KEY:
-    raise ValueError("TICKETMASTER_API_KEY is not set in your .env file.")
 
 city_explorer = geo.CityExplorer(GEOAPIFY_API_KEY)
 
@@ -26,7 +23,7 @@ def home():
     return "CityPulse API is running! Use /search?city=Austin to test."
 
 # 
-@app.route('/api/events')
+@app.route('/events')
 def get_events():
     """Get events from Ticketmaster API"""
     city = request.args.get('city', '').strip()
@@ -70,9 +67,9 @@ def get_events():
                 print(f"⚠️ Skipping event due to parse error: {parse_error}")
                 continue
 
-    return jsonify({"events": events, "total": len(events)})
+    return jsonify(events)
 
-@app.route('/api/places')
+@app.route('/places')
 def get_places():
     """Get places near an event location"""
     try:
@@ -262,6 +259,6 @@ def get_event_map_data():
 
 #     return jsonify(events)
 
-# if __name__ == '__main__':
-#     print("Starting Flask CityPulse app")
-#     app.run(debug=True)
+if __name__ == '__main__':
+     print("Starting Flask CityPulse app")
+     app.run(debug=True)

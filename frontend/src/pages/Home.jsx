@@ -10,7 +10,7 @@ function Home() {
 
   const navigate = useNavigate();
   useEffect(() => {
-    fetch(`http://127.0.0.1:5000/search?city=${location}`)
+    fetch(`http://127.0.0.1:5000/events?city=${location}`)
       .then(res => res.json())
       .then(data => {
         // Convert array to object for easy access by ID
