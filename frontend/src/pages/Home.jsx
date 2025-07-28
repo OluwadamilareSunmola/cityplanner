@@ -1,59 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import Sidebar from "../components/Sidebar.jsx";
 
 function Home() {
-  const [events, setEvents] = useState({
-    1: {
-      name: "Coldplay",
-      type: "music",
-      genre: "rock",
-      description:
-        "See Coldplay live on their Music of the Spheres Tour, featuring special guests and unforgettable performances.",
-      location: "El Paso",
-      address: "Sun Bowl Stadium",
-      time: "2025-08-15",
-    },
-    2: {
-      name: "Basketball Finals",
-      type: "sports",
-      genre: "n/a",
-      description: "Witness the ultimate basketball showdown this season.",
-      location: "El Paso",
-      address: "Don Haskins Center",
-      time: "2025-09-10",
-    },
-    3: {
-      name: "Shakespeare in the Park",
-      type: "theater",
-      genre: "classical",
-      description: "Enjoy a magical evening of live theater under the stars.",
-      location: "El Paso",
-      address: "Memorial Park",
-      time: "2025-07-30",
-    },
-    4: {
-      name: "Comedy Night",
-      type: "other",
-      genre: "comedy",
-      description: "Laugh the night away with top stand-up comedians.",
-      location: "El Paso",
-      address: "Comic Club",
-      time: "2025-12-01",
-    },
-  });
-
-  const [name, setName] = useState("");
-  const [tyoe, setPosition] = useState("");
-  const [genre, setGenre] = useState("Apply");
-  const [desctiprion, setDescription] = useState("");
-  const [location, setLocation] = useState("");
-  const [address, setAddress] = useState("");
-  const [time, setTime] = useState("");
+  const [events, setEvents] = useState({})
+  const [location, setLocation] = useState("El Paso"); // default city
 
   const navigate = useNavigate();
+  useEffect(() => {
+    fetch(`http://127.0.0.1:5000/search?city=${location}`)
+      .then(res => res.json())
+      .then(data => {
+        // Convert array to object for easy access by ID
+        const eventsObj = {};
+        data.forEach((event, index) => {
+          eventsObj[index] = {
+            name: event.name,
+            type: "music", // you can later improve with real data
+            genre: "rock", // or dynamically map
+            description: event.description || "No description provided.",
+            location: event.venue || "Unknown",
+            address: event.address || "No address",
+            time: event.datetime || "Unknown",
+            url: event.url
+          };
+        });
+        setEvents(eventsObj);
+      })
+      .catch(err => console.error("Failed to fetch events:", err));
+  }, [location]);
 
   const handleSaveEvent = async (id) => {
   const user = auth.currentUser;

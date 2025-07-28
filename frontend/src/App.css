@@ -1,5 +1,3 @@
-
-
 /* src/pages/Login.css */
 
 .wrapper-login {
@@ -62,7 +60,7 @@
 }
 
 
-.info-login img{
+.info-login img {
   border-radius: 5px;
 }
 
@@ -106,19 +104,19 @@
   background-color: #FFC288;
 }
 
-.wrapper-home{
+.wrapper-home {
   display: flex;
   height: 100vh;
 }
 
-.container-form{
+.container-form {
   width: calc(100% - 248px);
   display: flex;
   margin-left: 248px;
   justify-content: center;
 }
 
-.filter-section{
+.filter-section {
   width: calc(100% - 282px);
   position: fixed;
   display: flex;
@@ -128,7 +126,7 @@
   padding: 1rem;
 }
 
-.info{
+.info {
   width: 100%;
   margin-top: 10rem;
   display: flex;
@@ -136,34 +134,35 @@
   align-items: center;
 }
 
-.event-block{
+.event-block {
   background-color: white;
   width: 60%;
   margin-bottom: 1rem;
-  border-radius:  10px;
+  border-radius: 10px;
   box-shadow: rgb(199, 199, 199) 2px 2px 10px;
 }
 
-.event-block ul{
+.event-block ul {
   display: flex;
   padding: 0px
 }
 
-.event-block h3{
-  margin-left:1.5rem;
-}
-
-
-.event-block p{
+.event-block h3 {
   margin-left: 1.5rem;
 }
-.event-block ul p{
-  padding:  0px;
+
+
+.event-block p {
+  margin-left: 1.5rem;
+}
+
+.event-block ul p {
+  padding: 0px;
   margin: 0px;
   margin-left: 1.5rem;
 }
 
-.event-block button{
+.event-block button {
   margin: 0 0 1rem 1.5rem;
 }
 
@@ -205,14 +204,14 @@
   font-size: 24px;
   cursor: pointer;
   color: black;
-  font-size:xx-large;
+  font-size: xx-large;
 }
 
-.close-btn:hover{
-  color:#ccc;
+.close-btn:hover {
+  color: #ccc;
 }
 
-.planner{
+.planner {
   width: 65vw;
   height: 45rem;
   display: flex;
@@ -221,50 +220,64 @@
   align-self: center;
   border-radius: 10px;
   box-shadow: gray 3px 3px 10px;
-  
+
 }
 
-.planer-data{
-  width:45%;
+.planer-data {
+  width: 45%;
   margin: 3rem 0rem 3rem 2.5rem;
 }
 
-.planer-data h2, h3,p{
-  margin:0px;
+.planer-data h2,
+h3,
+p {
+  margin: 0px;
 }
 
-.planer-data h2, h3{
-  margin:1rem 0rem;
+.planer-data h2,
+h3 {
+  margin: 1rem 0rem;
 }
 
 
-.planer-data ul{
-  padding:0px;
+.planer-data ul {
+  padding: 0px;
   display: flex;
   flex-direction: row;
 }
 
-.planer-data p{
+.planer-data p {
   margin-right: 4rem;
 }
 
-.map{
-  width:55%;
+.map {
+  width: 55%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.description{
+.description {
   height: 8rem;
 }
 
-.activities{
-  height:16rem;
+.activities {
+  height: 16rem;
 }
 
 
-.map img{
+.map img {
   height: 350px;
 }
 
+.search-activities {
+  position: relative;
+  height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+}
+
+.return{
+  margin-top: 45%;
+
+}

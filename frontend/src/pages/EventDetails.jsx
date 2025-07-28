@@ -39,7 +39,7 @@ function EventDetails() {
             </div>
             <div className="buttons">
               <button onClick={() => navigate('/events')}>Return</button>
-              <button>Edit</button>
+              <button onClick={() => navigate('/plan', { state: { event } })}>Edit</button>
             </div>
           </div>
           <div className="map">
