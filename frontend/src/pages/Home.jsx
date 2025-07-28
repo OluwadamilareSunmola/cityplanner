@@ -153,7 +153,7 @@ function Home() {
           </form>
         </div>
 
-        <div className="info">
+        <div className="info mt-83">
           {filteredEvents.length === 0 ? (
             <p>No events found.</p>
           ) : (

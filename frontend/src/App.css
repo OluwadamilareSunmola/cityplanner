@@ -123,12 +123,10 @@
   align-items: center;
   flex-direction: column;
   background-color: #FFF3E2;
-  padding: 1rem;
+  padding: .3rem;
 }
 
 .info {
-  width: 100%;
-  margin-top: 10rem;
   display: flex;
   flex-direction: column;
   align-items: center;
