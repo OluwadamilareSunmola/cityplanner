@@ -76,15 +76,15 @@
 .sidebar {
   width: 200px;
   height: 100vh;
-  margin: none;
-  border: none;
   background-color: #FEA82F;
   color: black;
-  padding: 0 1.5rem ;
+  padding: 0 1.5rem;
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 1000;
 }
+
 
 .sidebar-title {
   margin-bottom: 2rem;
@@ -169,4 +169,10 @@
 
 .event-block button{
   margin: 0 0 1rem 1.5rem;
+}
+
+.map-container {
+  margin-left: 200px;
+  height: 100vh;
+  width: calc(100vw - 200px);
 }
