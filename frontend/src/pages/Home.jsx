@@ -85,7 +85,9 @@ function Home() {
       <Sidebar />
       <div className="container-form">
         <div className="filter-section mb-10">
-          <h2 className="title">Find Events</h2>
+          <h2 className="title text-4xl">Find Events</h2>
+          <p className="text-1xl font-bold text-gray-800">What if you could uncover the hidden events around you?</p>
+          <p className="text-1xl font-bold pb-6 text-gray-800">What if the events you seek were closer than you think?</p>
           <input
             className="w-140 h-9 rounded-sm mb-4"
             type="text"
