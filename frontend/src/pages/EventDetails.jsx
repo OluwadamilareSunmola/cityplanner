@@ -75,6 +75,10 @@ function EventDetails() {
   }
 
   const formatDateTime = (timestamp) => {
+      if (timestamp === "Unknown" || !timestamp) {
+        return "Unknown";
+      }
+
         const date = new Date(timestamp);
 
         return date.toLocaleString('en-US', {
