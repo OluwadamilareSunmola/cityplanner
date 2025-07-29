@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 import { getDocs, collection } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
+import SearchSection from "../components/SearchSection.jsx";
+import EventsContainer from "../components/EventsContainer.jsx";
 
 function Events() {
   const [savedEvents, setSavedEvents] = useState({});
@@ -63,103 +65,19 @@ function Events() {
     <div className="wrapper-home">
       <Sidebar />
       <div className="container-form">
-        <div className="filter-section">
-          <h2 className="title">Find Events</h2>
-          <input
-            type="text"
-            placeholder="Search..."
-            value={filters.text}
-            onChange={(e) => setFilters({ ...filters, text: e.target.value })}
+        <SearchSection
+          filters={filters}
+          setFilters={setFilters}
+          title={"Saved Events"}
+          subtitle={"What if the moments you cherished were saved in the midst of your life?\n  \
+                    What if the events you once loved were closer than you thought?"}
           />
-          <form
-            className="event-filter-form"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <label htmlFor="event-type">Type</label>
-            <select
-              id="event-type"
-              name="type"
-              value={filters.type}
-              onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-            >
-              <option value="">-- Select Type --</option>
-              <option value="music">Music</option>
-              <option value="sports">Sports</option>
-              <option value="theater">Theater</option>
-              <option value="other">Other</option>
-            </select>
 
-            <label htmlFor="genre">Genre</label>
-            <select
-              id="genre"
-              name="genre"
-              value={filters.genre}
-              onChange={(e) =>
-                setFilters({ ...filters, genre: e.target.value })
-              }
-            >
-              <option value="">-- Select Genre --</option>
-              <option value="rock">Rock</option>
-              <option value="hiphop">Hip-Hop</option>
-              <option value="classical">Classical</option>
-              <option value="comedy">Comedy</option>
-            </select>
-
-            <label htmlFor="time-range">When</label>
-            <select
-              id="time-range"
-              name="time"
-              value={filters.time}
-              onChange={(e) => setFilters({ ...filters, time: e.target.value })}
-            >
-              <option value="">-- Select Time Range --</option>
-              <option value="month">This Month</option>
-              <option value="6months">Next 6 Months</option>
-              <option value="year">Next Year</option>
-            </select>
-          </form>
-        </div>
-
-        <div className="info">
-          {filteredEvents.length === 0 ? (
-            <p>No events found.</p>
-          ) : (
-            filteredEvents.map(([id, event]) => (
-              <div
-                key={id}
-                className="event-block"
-                onClick={() => setSelectedEvent(event)}
-              >
-                <h3>{event.name}</h3>
-                <p>
-                  <strong>Description:</strong> {event.description}
-                </p>
-                <ul>
-                  <p>
-                    <strong>Location:</strong> {event.location}
-                  </p>
-                  <p>
-                    <strong>Type:</strong> {event.type}
-                  </p>
-                  <p>
-                    <strong>Genre:</strong> {event.genre}
-                  </p>
-                  <p>
-                    <strong>Time:</strong> {event.time}
-                  </p>
-                  <p>
-                    <strong>Address:</strong> {event.address}
-                  </p>
-                </ul>
-                <button
-                  onClick={() => navigate("/details", { state: { event } })}
-                >
-                  Plan
-                </button>
-              </div>
-            ))
-          )}
-        </div>
+        <EventsContainer filteredEvents={filteredEvents}>
+                  {(id, event, buttonClass) => (
+                    <button className={buttonClass} onClick={() => navigate("/details", { state: { event } })}>Plan</button>
+                  )}
+        </EventsContainer>
       </div>
     </div>
   );

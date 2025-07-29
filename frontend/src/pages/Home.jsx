@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import Sidebar from "../components/Sidebar.jsx";
+import SearchSection from "../components/SearchSection.jsx";
+import EventsContainer from "../components/EventsContainer.jsx";
 
 function Home() {
   const [events, setEvents] = useState({})
@@ -84,107 +86,19 @@ function Home() {
     <div className="wrapper-home">
       <Sidebar />
       <div className="container-form">
-        <div className="filter-section mb-10">
-          <h2 className="title text-4xl">Find Events</h2>
-          <p className="text-1xl font-bold text-gray-800">What if you could uncover the hidden events around you?</p>
-          <p className="text-1xl font-bold pb-6 text-gray-800">What if the events you seek were closer than you think?</p>
-          <input
-            className="w-140 h-9 rounded-sm mb-4"
-            type="text"
-            placeholder="Search..."
-            value={filters.text}
-            onChange={(e) => setFilters({ ...filters, text: e.target.value })}
+        <SearchSection
+          filters={filters}
+          setFilters={setFilters}
+          title={"Find Events"}
+          subtitle={"What if you could uncover the hidden events around you?\n  \
+            What if the events you seek were closer than you think?"}
           />
-          <form
-            className="event-filter-form flex-row flex"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <div className="flex flex-col items-center mx-7">
-              <label className="text-md" htmlFor="event-type">Type</label>
-              <select
-                className="w-40 h-6 rounded-sm mb-4"
-                id="event-type"
-                name="type"
-                value={filters.type}
-                onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-              >
-                <option value="">-- Select Type --</option>
-                <option value="music">Music</option>
-                <option value="sports">Sports</option>
-                <option value="theater">Theater</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
 
-            <div className="flex flex-col items-center mx-7">
-            <label className="text-md" htmlFor="genre">Genre</label>
-            <select
-              className="w-40 h-6 rounded-sm mb-4"
-              id="genre"
-              name="genre"
-              value={filters.genre}
-              onChange={(e) =>
-                setFilters({ ...filters, genre: e.target.value })
-              }
-            >
-              <option value="">-- Select Genre --</option>
-              <option value="rock">Rock</option>
-              <option value="hiphop">Hip-Hop</option>
-              <option value="classical">Classical</option>
-              <option value="comedy">Comedy</option>
-            </select>
-            </div>
-
-            <div className="flex flex-col items-center mx-7">
-              <label className="text-md" htmlFor="time-range">When</label>
-              <select
-                className="w-40 h-6 rounded-sm mb-4"
-                id="time-range"
-                name="time"
-                value={filters.time}
-                onChange={(e) => setFilters({ ...filters, time: e.target.value })}
-              >
-                <option value="">-- Select Time Range --</option>
-                <option value="month">This Month</option>
-                <option value="6months">Next 6 Months</option>
-                <option value="year">Next Year</option>
-              </select>
-            </div>
-          </form>
-        </div>
-
-        <div className="info mt-83">
-          {filteredEvents.length === 0 ? (
-            <p>No events found.</p>
-          ) : (
-            filteredEvents.map(([id, event]) => (
-              <div key={id} className="event-block">
-                <h3>{event.name}</h3>
-                <p>
-                  <strong>Description:</strong> {event.description}
-                </p>
-                <ul>
-                  <p>
-                    <strong>Location:</strong> {event.location}
-                  </p>
-                  <p>
-                    <strong>Type:</strong> {event.type}
-                  </p>
-                  <p>
-                    <strong>Genre:</strong> {event.genre}
-                  </p>
-                  <p>
-                    <strong>Time:</strong> {event.time}
-                  </p>
-                  <p>
-                    <strong>Address:</strong> {event.address}
-                  </p>
-                </ul>
-                <button className="w-17 h-9 text-md font-bold rounded-lg" onClick={() => handleSaveEvent(id)}>Add</button>
-              </div>
-            ))
+        <EventsContainer filteredEvents={filteredEvents}>
+          {(id, event, buttonClass) => (
+            <button className={buttonClass} onClick={() => handleSaveEvent(id)}>Add</button>
           )}
-        </div>
+        </EventsContainer>
       </div>
     </div>
   );
