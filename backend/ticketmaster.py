@@ -60,7 +60,9 @@ def get_events():
                     "address": venue.get("address", {}).get("line1", ""),
                     "city": venue.get("city", {}).get("name", ""),
                     "lat": float(venue["location"]["latitude"]),
-                    "lng": float(venue["location"]["longitude"])
+                    "lng": float(venue["location"]["longitude"]),
+                    "segment": event.get("genre", {}).get("segment", "Unknown"),
+                    "genre": event.get("genre", {}).get("name", "Unknown")
                 })
             except (KeyError, IndexError, ValueError) as parse_error:
                 print(f"Skipping event due to parse error: {parse_error}")
@@ -88,7 +90,7 @@ def get_places():
         event_location = {
             'name': event_name,
             'lat': lat,
-            'lng': lng,
+            'lon': lng,
             'address': address
         }
 
@@ -131,7 +133,7 @@ def get_event_with_places():
         event_location = {
             'name': event_name,
             'lat': lat,
-            'lng': lng,
+            'lon': lng,
             'address': address
         }
 
@@ -198,7 +200,7 @@ def get_event_map_data():
         event_location = {
             'name': selected_event['name'],
             'lat': selected_event['lat'],
-            'lng': selected_event['lng'],
+            'lon': selected_event['lng'],
             'address': selected_event['address']
         }
 
