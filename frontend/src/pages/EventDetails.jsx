@@ -34,12 +34,12 @@ function EventDetails() {
         venue: event.location || event.venue || '',
         datetime: event.time || '',
         url: event.url || '',
-        radius: 1000,
-        limit: 15
+        radius: 1500,
+        limit: 20
       });
 
       // Add search types
-      const types = ['restaurants', 'bars', 'entertainment', 'attractions'];
+      const types = ['restaurants', 'bars', 'entertainment', 'attractions', 'shopping'];
       types.forEach(type => {
         params.append('types', type);
       });

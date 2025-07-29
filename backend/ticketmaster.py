@@ -27,7 +27,7 @@ def home():
 def get_events():
     """Get events from Ticketmaster API"""
     city = request.args.get('city', '').strip()
-    size = request.args.get('size', 10, type=int)
+    size = request.args.get('size', 20, type=int)
 
     if not city:
         return jsonify({"error": "Missing 'city' parameter"}), 400
