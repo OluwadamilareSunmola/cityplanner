@@ -22,7 +22,6 @@ city_explorer = geo.CityExplorer(GEOAPIFY_API_KEY)
 def home():
     return "CityPulse API is running! Use /search?city=Austin to test."
 
-# 
 @app.route('/events')
 def get_events():
     """Get events from Ticketmaster API"""
@@ -64,7 +63,7 @@ def get_events():
                     "lng": float(venue["location"]["longitude"])
                 })
             except (KeyError, IndexError, ValueError) as parse_error:
-                print(f"⚠️ Skipping event due to parse error: {parse_error}")
+                print(f"Skipping event due to parse error: {parse_error}")
                 continue
 
     return jsonify(events)
@@ -73,7 +72,7 @@ def get_events():
 def get_places():
     """Get places near an event location"""
     try:
-        # Get parameters
+        # get parameters
         lat = request.args.get('lat', type=float)
         lng = request.args.get('lng', type=float)
         event_name = request.args.get('event_name', 'Event Location')
@@ -85,7 +84,7 @@ def get_places():
         if not lat or not lng:
             return jsonify({"error": "Missing lat/lng parameters"}), 400
 
-        # Create event location object
+        # create event location object
         event_location = {
             'name': event_name,
             'lat': lat,
@@ -93,7 +92,7 @@ def get_places():
             'address': address
         }
 
-        # Get GeoJSON data
+        # get GeoJSON data
         geojson_data = city_explorer.get_geojson_data(
             event_location=event_location,
             search_types=search_types,
@@ -106,9 +105,72 @@ def get_places():
     except Exception as e:
         return jsonify({"error": "Failed to fetch places", "details": str(e)}), 500
 
+@app.route('/event-with-places')
+def get_event_with_places():
+    # Get a specific event with nearby places data
+    try:
+        # get event details from frontend
+        event_id = request.args.get('event_id')
+        event_name = request.args.get('event_name', 'Event')
+        lat = request.args.get('lat', type=float)
+        lng = request.args.get('lng', type=float)
+        address = request.args.get('address', '')
+        venue = request.args.get('venue', '')
+        datetime = request.args.get('datetime', '')
+        url = request.args.get('url', '')
+        
+        # optional parameters
+        search_types = request.args.getlist('types') or ['restaurants', 'bars', 'entertainment', 'attractions']
+        radius = request.args.get('radius', 1500, type=int)
+        limit = request.args.get('limit', 15, type=int)
+
+        if not lat or not lng:
+            return jsonify({"error": "Missing lat/lng parameters"}), 400
+
+        # create event location object for geoapify
+        event_location = {
+            'name': event_name,
+            'lat': lat,
+            'lng': lng,
+            'address': address
+        }
+
+        # get places around the event
+        geojson_data = city_explorer.get_geojson_data(
+            event_location=event_location,
+            search_types=search_types,
+            radius=radius,
+            limit_per_category=limit
+        )
+
+        # return both event data and places data
+        response_data = {
+            "event": {
+                "id": event_id,
+                "name": event_name,
+                "lat": lat,
+                "lng": lng,
+                "address": address,
+                "venue": venue,
+                "datetime": datetime,
+                "url": url
+            },
+            "places_data": geojson_data,
+            "search_params": {
+                "types": search_types,
+                "radius": radius,
+                "limit_per_category": limit
+            }
+        }
+
+        return jsonify(response_data)
+
+    except Exception as e:
+        return jsonify({"error": "Failed to fetch event with places", "details": str(e)}), 500
+
 @app.route('/event-map-data')
 def get_event_map_data():
-    # Get both event and surrounding places data for map
+    # get both event and surrounding places data for map
     try:
         event_id = request.args.get('event_id')
         city = request.args.get('city')
@@ -116,9 +178,8 @@ def get_event_map_data():
         if not city:
             return jsonify({"error": "Missing city parameter"}), 400
 
-        # First get events
         events_response = get_events()
-        if events_response[1] != 200:  # Check status code
+        if events_response[1] != 200: 
             return events_response
 
         events_data = events_response[0].get_json()
@@ -127,13 +188,13 @@ def get_event_map_data():
         if not events:
             return jsonify({"error": "No events found"}), 404
 
-        # If specific event_id provided, find that event
+        # if specific event_id provided, find that event
         if event_id:
             selected_event = next((e for e in events if e['id'] == event_id), events[0])
         else:
             selected_event = events[0]
 
-        # Get places around the selected event
+        # get places around the selected event
         event_location = {
             'name': selected_event['name'],
             'lat': selected_event['lat'],
@@ -156,108 +217,6 @@ def get_event_map_data():
 
     except Exception as e:
         return jsonify({"error": "Failed to fetch event map data", "details": str(e)}), 500
-    
-# 
-
-#@app.route('/search')
-# def search():
-#     city = request.args.get('city', '').strip()
-
-#     if not city:
-#         return jsonify({"error": "Missing 'city' parameter"}), 400
-
-#     url = "https://app.ticketmaster.com/discovery/v2/events.json"
-#     params = {
-#         "apikey": API_KEY,
-#         "city": city,
-#         "size": 10,
-#         "sort": "date,asc"
-#     }
-
-#     try:
-#         res = requests.get(url, params=params)
-#         res.raise_for_status()
-#         data = res.json()
-#     except requests.RequestException as e:
-#         return jsonify({"error": "Failed to connect to Ticketmaster", "details": str(e)}), 500
-
-#     events = []
-
-#     if "_embedded" in data:
-#         for e in data["_embedded"]["events"]:
-#             try:
-#                 venue = e["_embedded"]["venues"][0]
-#                 events.append({
-#                 "name": e.get("name", "Unknown"),
-#                 "url": e.get("url", None),
-#                 "datetime": e.get("dates", {}).get("start", {}).get("dateTime", "TBD"),
-#                 "venue": venue.get("name", "Unknown"),
-#                 "lat": float(venue.get("location", {}).get("latitude", 0.0)) if "location" in venue and "latitude" in venue["location"] else None,
-#                 "lng": float(venue.get("location", {}).get("longitude", 0.0)) if "location" in venue and "longitude" in venue["location"] else None,
-#                 "distance": e.get("distance")
-#             })
-
-#             except (KeyError, IndexError, ValueError) as parse_error:
-#                 print(f"Skipping event due to parse error: {parse_error}")
-#                 continue
-
-#     return jsonify(events)@app.route('/search/geo')
-# def geo_search():
-#     lat = request.args.get('lat')
-#     lon = request.args.get('lon')
-#     radius = request.args.get('radius', '10')
-#     unit = request.args.get('unit', 'miles')
-
-#     if not lat or not lon:
-#         return jsonify({"error": "Both 'lat' and 'lon' parameters are required"}), 400
-    
-#     try:
-
-#         float(lat)
-#         float(lon)
-#     except ValueError:
-#         return jsonify({"error": "Invalid latitude or longitude format"}), 400
-
-#     latlong = f"{lat},{lon}"
-    
-#     url = "https://app.ticketmaster.com/discovery/v2/events.json"
-#     params = {
-#         "apikey": API_KEY,
-#         "latlong": latlong,
-#         "radius": radius,
-#         "unit": unit,
-#         "size": 50,
-#         "sort": "date,asc"
-#     }
-
-#     try:
-#         res = requests.get(url, params=params)
-#         res.raise_for_status()
-#         data = res.json()
-#     except requests.RequestException as e:
-#         return jsonify({"error": "Failed to connect to Ticketmaster", "details": str(e)}), 500
-
-#     events = []
-
-#     if "_embedded" in data and "events" in data["_embedded"]:
-#         for e in data["_embedded"]["events"]:
-#             try:
-#                 venue = e["_embedded"]["venues"][0]
-#                 events.append({
-#                 "name": e.get("name", "Unknown"),
-#                 "url": e.get("url", None),
-#                 "datetime": e.get("dates", {}).get("start", {}).get("dateTime", "TBD"),
-#                 "venue": venue.get("name", "Unknown"),
-#                 "lat": float(venue.get("location", {}).get("latitude", 0.0)) if "location" in venue and "latitude" in venue["location"] else None,
-#                 "lng": float(venue.get("location", {}).get("longitude", 0.0)) if "location" in venue and "longitude" in venue["location"] else None,
-#                 "distance": e.get("distance")
-#             })
-
-#             except (KeyError, IndexError, ValueError) as parse_error:
-#                 print(f"Skipping event due to parse error: {parse_error}")
-#                 continue
-
-#     return jsonify(events)
 
 if __name__ == '__main__':
      print("Starting Flask CityPulse app")
