@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import Sidebar from "../components/Sidebar.jsx";
+import SearchSection from "../components/SearchSection.jsx";
+import EventsContainer from "../components/EventsContainer.jsx";
 
 function isInTimeRange(eventTime, selectedRange) {
   if (!eventTime || selectedRange === "") return true;
@@ -131,123 +133,19 @@ function Home() {
     <div className="wrapper-home">
       <Sidebar />
       <div className="container-form">
-        <div className="filter-section mb-10">
-          <h2 className="title">Find Events</h2>
-          <input
-            className="w-140 h-9 rounded-sm mb-4"
-            type="text"
-            placeholder="Search..."
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                // Update the location to trigger fetch
-                setLocation(searchInput.trim());
-              }
-            }}
+        <SearchSection
+          filters={filters}
+          setFilters={setFilters}
+          title={"Find Events"}
+          subtitle={"What if you could uncover the hidden events around you?\n  \
+            What if the events you seek were closer than you think?"}
           />
-          <form
-            className="event-filter-form flex-row flex"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <div className="flex flex-col items-center mx-7">
-              <label className="text-md" htmlFor="event-type">
-                Type
-              </label>
-              <select
-                className="w-40 h-6 rounded-sm mb-4"
-                id="event-type"
-                name="type"
-                value={filters.type}
-                onChange={(e) =>
-                  setFilters({ ...filters, type: e.target.value })
-                }
-              >
-                <option value="">All Types</option>
-                <option value="Music">Music</option>
-                <option value="Sports">Sports</option>
-                <option value="Arts & Theatre">Arts & Theatre</option>
-                <option value="Miscellaneous">Miscellaneous</option>
-              </select>
-            </div>
 
-            <div className="flex flex-col items-center mx-7">
-              <label className="text-md" htmlFor="genre">
-                Genre
-              </label>
-              <select
-                className="w-40 h-6 rounded-sm mb-4"
-                id="genre"
-                name="genre"
-                value={filters.genre}
-                onChange={(e) =>
-                  setFilters({ ...filters, genre: e.target.value })
-                }
-              >
-                <option value="">All Genres</option>
-                <option value="Rock">Rock</option>
-                <option value="Pop">Pop</option>
-                <option value="Hip-Hop/Rap">Hip-Hop/Rap</option>
-                <option value="Classical">Classical</option>
-                <option value="Comedy">Comedy</option>
-              </select>
-            </div>
-
-            <div className="flex flex-col items-center mx-7">
-              <label className="text-md" htmlFor="time-range">
-                When
-              </label>
-              <select
-                className="w-40 h-6 rounded-sm mb-4"
-                id="time-range"
-                name="time"
-                value={filters.time}
-                onChange={(e) =>
-                  setFilters({ ...filters, time: e.target.value })
-                }
-              >
-                <option value="">All Times</option>
-                <option value="thisWeek">This Week</option>
-                <option value="nextMonth">Next Month</option>
-                <option value="sixMonths">Next 6 Months</option>
-                <option value="year">Next Year</option>
-              </select>
-            </div>
-          </form>
-        </div>
-
-        <div className="info">
-          {filteredEvents.length === 0 ? (
-            <p>No events found.</p>
-          ) : (
-            filteredEvents.map(([id, event]) => (
-              <div key={id} className="event-block">
-                <h3>{event.name}</h3>
-                <p>
-                  <strong>Description:</strong> {event.description}
-                </p>
-                <ul>
-                  <p>
-                    <strong>Location:</strong> {event.location}
-                  </p>
-                  <p>
-                    <strong>Type:</strong> {event.type}
-                  </p>
-                  <p>
-                    <strong>Genre:</strong> {event.genre}
-                  </p>
-                  <p>
-                    <strong>Time:</strong> {event.time}
-                  </p>
-                  <p>
-                    <strong>Address:</strong> {event.address}
-                  </p>
-                </ul>
-                <button onClick={() => handleSaveEvent(id)}>Add</button>
-              </div>
-            ))
+        <EventsContainer filteredEvents={filteredEvents}>
+          {(id, event, buttonClass) => (
+            <button className={buttonClass} onClick={() => handleSaveEvent(id)}>Add</button>
           )}
-        </div>
+        </EventsContainer>
       </div>
     </div>
   );
