@@ -2,7 +2,7 @@ import Sidebar from "../components/Sidebar.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, doc, deleteDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import SearchSection from "../components/SearchSection.jsx";
 import EventsContainer from "../components/EventsContainer.jsx";
@@ -34,6 +34,36 @@ function Events() {
 
     return () => unsubscribe();
   }, []);
+
+  const handleDeleteEvent = async (eventId) => {
+    const user = auth.currentUser;
+    if (!user) {
+      alert("Please log in to delete events.");
+      return;
+    }
+
+    // confirm deletion
+    if (!window.confirm("Are you sure you want to remove this event?")) {
+      return;
+    }
+
+    try {
+      // delete from Firestore
+      await deleteDoc(doc(db, "users", user.uid, "savedEvents", eventId));
+
+      // update local state to remove the event
+      setEvents(prevEvents => {
+        const updatedEvents = { ...prevEvents };
+        delete updatedEvents[eventId];
+        return updatedEvents;
+      });
+
+      alert("Event removed successfully!");
+    } catch (error) {
+      console.error("Error deleting event:", error);
+      alert("Failed to remove event.");
+    }
+  };
 
   const [filters, setFilters] = useState({
     text: "",
@@ -74,9 +104,20 @@ function Events() {
           />
 
         <EventsContainer filteredEvents={filteredEvents}>
-                  {(id, event, buttonClass) => (
-                    <button className={buttonClass} onClick={() => navigate("/details", { state: { event } })}>Plan</button>
-                  )}
+          {(id, event, buttonClass) => (
+            <div style={{display: 'flex', gap: '10px'}}>
+              <button className={buttonClass} onClick={() => navigate("/details", { state: { event } })}>
+                Plan
+              </button>
+              <button 
+                className={buttonClass} 
+                style={{backgroundColor: '#dc2626', color: 'white'}}
+                onClick={() => handleDeleteEvent(id)}
+              >
+                Remove
+              </button>
+            </div>
+          )}
         </EventsContainer>
       </div>
     </div>
