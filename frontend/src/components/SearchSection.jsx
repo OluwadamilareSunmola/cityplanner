@@ -1,4 +1,4 @@
-export default function SearchSection({ filters, setFilters, title, subtitle }) {
+export default function SearchSection({ filters, setFilters, title, subtitle, setLocation, setSearchInput, searchInput }) {
     return <>
         <div className="filter-section mb-10">
           <h2 className="title text-4xl">{title}</h2>
@@ -11,8 +11,13 @@ export default function SearchSection({ filters, setFilters, title, subtitle }) 
             className="w-140 h-9 rounded-sm mb-4"
             type="text"
             placeholder="Search..."
-            value={filters.text}
-            onChange={(e) => setFilters({ ...filters, text: e.target.value })}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setLocation(searchInput.trim());
+              }
+            }}
           />
           <form
             className="event-filter-form flex-row flex"

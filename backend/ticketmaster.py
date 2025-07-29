@@ -3,6 +3,7 @@ import requests
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from flask_cors import CORS
+import json
 
 import geoapify as geo
 
@@ -49,12 +50,13 @@ def get_events():
     events = []
     if "_embedded" in data:
         for event in data["_embedded"]["events"]:
+            print(json.dumps(event, indent=2))
             try:
                 venue = event["_embedded"]["venues"][0]
                 events.append({
                     "id": event["id"],
                     "name": event["name"],
-                    "url": event["url"],
+                    "url": event["url"] if "url" in event else "",
                     "datetime": event["dates"]["start"].get("dateTime", "TBD"),
                     "venue": venue.get("name", "Unknown"),
                     "address": venue.get("address", {}).get("line1", ""),

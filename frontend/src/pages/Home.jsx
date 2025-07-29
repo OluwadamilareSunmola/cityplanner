@@ -136,6 +136,9 @@ function Home() {
         <SearchSection
           filters={filters}
           setFilters={setFilters}
+          setLocation={setLocation}
+          setSearchInput={setSearchInput}
+          searchInput={searchInput}
           title={"Find Events"}
           subtitle={"What if you could uncover the hidden events around you?\n  \
             What if the events you seek were closer than you think?"}

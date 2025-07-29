@@ -93,7 +93,7 @@ function EventDetails() {
     <div className="wrapper-home">
   <Sidebar />
   <div className="container-form items-center">
-    <div className="p-6 flexflex-row gap-8 justify-center items-center">
+    <div className="p-6 flex flex-row gap-8 justify-center items-center">
 
           <div className="bg-white rounded-xl border border-gray-200 p-8 shadow-sm h-150 relative">
             <div className="mb-8">
@@ -162,13 +162,6 @@ function EventDetails() {
               >
                 Return to Events
               </button>
-              {placesData && (
-                <button onClick={() => console.log('Places data:', placesData)} 
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold duration-200 transition-colors cursor-pointer"
-                >
-                  Debug: Log Places Data
-                </button>
-              )}
             </div>
           </div>
         </div>
@@ -177,7 +170,7 @@ function EventDetails() {
           <div className="bg-white rounded-xl border border-gray-200 p-6 pb-13 shadow-sm top-6 h-150 w-150">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Location</h3>
             <div className="bg-gray-100 rounded-lg mb-4 h-full w-full overflow-hidden">
-              <MapComponent eventData={event} placesData={placesData} />
+              <MapComponent coordinates={[event.lat, event.lng]} zoom={14} eventData={event} placesData={placesData} />
             </div>
           </div>
 
