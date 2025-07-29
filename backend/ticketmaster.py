@@ -60,7 +60,9 @@ def get_events():
                     "address": venue.get("address", {}).get("line1", ""),
                     "city": venue.get("city", {}).get("name", ""),
                     "lat": float(venue["location"]["latitude"]),
-                    "lng": float(venue["location"]["longitude"])
+                    "lng": float(venue["location"]["longitude"]),
+                    "segment": event.get("genre", {}).get("segment", "Unknown"),
+                    "genre": event.get("genre", {}).get("name", "Unknown")
                 })
             except (KeyError, IndexError, ValueError) as parse_error:
                 print(f"Skipping event due to parse error: {parse_error}")
