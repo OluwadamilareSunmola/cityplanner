@@ -170,7 +170,7 @@ function EventDetails() {
           <div className="bg-white rounded-xl border border-gray-200 p-6 pb-13 shadow-sm top-6 h-150 w-150">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Location</h3>
             <div className="bg-gray-100 rounded-lg mb-4 h-full w-full overflow-hidden">
-              <MapComponent coordinates={[event.lat, event.lng]} zoom={14} eventData={event} placesData={placesData} />
+              <MapComponent coordinates={[event.lat, event.lng]} zoom={17} eventData={event} placesData={placesData} />
             </div>
           </div>
 

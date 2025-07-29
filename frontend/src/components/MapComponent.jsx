@@ -51,9 +51,6 @@ export default function MapComponent({ coordinates, eventData, placesData, zoom 
     coordinates = [40.7128, -74.0060]; // default to New York City if no coordinates provided
   }
 
-  console.log("event data: ", eventData);
-  console.log("places data: ", placesData);
-
   return <>
     <MapContainer center={coordinates} zoom={zoom} style={{ height: '100%', width: '100%' }}>
       <ChangeView center={coordinates} zoom={zoom} />
@@ -83,7 +80,6 @@ export default function MapComponent({ coordinates, eventData, placesData, zoom 
       if (coordinates[0] === place.geometry.coordinates[1] && coordinates[1] === place.geometry.coordinates[0]) {
         return null; // skip the event location itself
       }
-      console.log("Place: ", place);
 
       return (
       <CircleMarker
