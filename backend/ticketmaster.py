@@ -27,7 +27,7 @@ def home():
 def get_events():
     """Get events from Ticketmaster API"""
     city = request.args.get('city', '').strip()
-    size = request.args.get('size', 10, type=int)
+    size = request.args.get('size', 20, type=int)
 
     if not city:
         return jsonify({"error": "Missing 'city' parameter"}), 400
@@ -50,21 +50,20 @@ def get_events():
     events = []
     if "_embedded" in data:
         for event in data["_embedded"]["events"]:
-            print(json.dumps(event, indent=2))
             try:
                 venue = event["_embedded"]["venues"][0]
                 events.append({
                     "id": event["id"],
                     "name": event["name"],
                     "url": event["url"] if "url" in event else "",
-                    "datetime": event["dates"]["start"].get("dateTime", "TBD"),
+                    "localdate": event["dates"]["start"].get("localDate", "TBD"),
                     "venue": venue.get("name", "Unknown"),
                     "address": venue.get("address", {}).get("line1", ""),
                     "city": venue.get("city", {}).get("name", ""),
                     "lat": float(venue["location"]["latitude"]),
                     "lng": float(venue["location"]["longitude"]),
-                    "segment": event.get("genre", {}).get("segment", "Unknown"),
-                    "genre": event.get("genre", {}).get("name", "Unknown")
+                    "segment": event.get("classifications", [{}])[0].get("segment", {}).get("name", "Unknown"),
+                    "genre": event.get("classifications", [{}])[0].get("genre", {}).get("name", "Unknown")
                 })
             except (KeyError, IndexError, ValueError) as parse_error:
                 print(f"Skipping event due to parse error: {parse_error}")
