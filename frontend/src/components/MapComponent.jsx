@@ -46,7 +46,7 @@ function PopUpComponent({ name, address, type }) {
 
 }
 
-export default function MapComponent({ coordinates, eventData, placesData, zoom = 13 }) {
+export default function MapComponent({ coordinates, eventData, placesData, events, zoom = 13 }) {
   if (!coordinates || coordinates.length !== 2) {
     coordinates = [40.7128, -74.0060]; // default to New York City if no coordinates provided
   }
@@ -71,11 +71,14 @@ export default function MapComponent({ coordinates, eventData, placesData, zoom 
           fillOpacity: 0.6
         }}
       >
-        <PopUpComponent 
-          name={eventData.name}
-          address={eventData.address}
-          type={eventData.type}
-        /> 
+        {eventData && eventData.name && eventData.address && eventData.type &&
+          <PopUpComponent 
+            name={eventData.name}
+            address={eventData.address}
+            type={eventData.type}
+          />
+        }
+        {!eventData && <PopUpComponent name="You" address="Home" type="User" />}
       </CircleMarker>
 
     {placesData && placesData.places_data && placesData.places_data.features.map((place, index) => {
@@ -120,6 +123,30 @@ export default function MapComponent({ coordinates, eventData, placesData, zoom 
         />
       </CircleMarker>
     )})}
+
+    { events && Object.entries(events).map(([id, event]) => {
+      if (!event.lat || !event.lng) return null; // skip events without coordinates
+
+      return (
+        <CircleMarker
+          key={id}
+          center={[event.lat, event.lng]}
+          radius={8}
+        pathOptions={{
+          color: '#6488ea',
+          weight: 1,
+          fillColor: '#6488ea',
+          fillOpacity: 0.6
+        }}
+      >
+        <PopUpComponent
+          name={event.name}
+          address={event.address}
+          type={event.type}
+        />
+      </CircleMarker>
+    )})}
+
     </MapContainer>
   </>
 }
