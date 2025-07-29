@@ -28,10 +28,10 @@ export default function SearchSection({ filters, setFilters, title, subtitle }) 
                 onChange={(e) => setFilters({ ...filters, type: e.target.value })}
               >
                 <option value="">-- Select Type --</option>
-                <option value="music">Music</option>
-                <option value="sports">Sports</option>
-                <option value="theater">Theater</option>
-                <option value="other">Other</option>
+                <option value="Music">Music</option>
+                <option value="Sports">Sports</option>
+                <option value="Arts & Theater">Arts & Theatre</option>
+                <option value="Miscellaneous">Miscellaneous</option>
               </select>
             </div>
 
@@ -46,11 +46,12 @@ export default function SearchSection({ filters, setFilters, title, subtitle }) 
                 setFilters({ ...filters, genre: e.target.value })
               }
             >
-              <option value="">-- Select Genre --</option>
-              <option value="rock">Rock</option>
-              <option value="hiphop">Hip-Hop</option>
-              <option value="classical">Classical</option>
-              <option value="comedy">Comedy</option>
+              <option value="">All Genres</option>
+              <option value="Rock">Rock</option>
+              <option value="Pop">Pop</option>
+              <option value="Hip-Hop/Rap">Hip-Hop/Rap</option>
+              <option value="Classical">Classical</option>
+              <option value="Comedy">Comedy</option>
             </select>
             </div>
 
@@ -63,9 +64,10 @@ export default function SearchSection({ filters, setFilters, title, subtitle }) 
                 value={filters.time}
                 onChange={(e) => setFilters({ ...filters, time: e.target.value })}
               >
-                <option value="">-- Select Time Range --</option>
+                <option value="">All Times</option>
+                <option value="thisWeek">This Week</option>
                 <option value="month">This Month</option>
-                <option value="6months">Next 6 Months</option>
+                <option value="sixMonths">Next 6 Months</option>
                 <option value="year">Next Year</option>
               </select>
             </div>
