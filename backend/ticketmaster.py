@@ -90,7 +90,7 @@ def get_places():
         event_location = {
             'name': event_name,
             'lat': lat,
-            'lng': lng,
+            'lon': lng,
             'address': address
         }
 
@@ -133,7 +133,7 @@ def get_event_with_places():
         event_location = {
             'name': event_name,
             'lat': lat,
-            'lng': lng,
+            'lon': lng,
             'address': address
         }
 
@@ -200,7 +200,7 @@ def get_event_map_data():
         event_location = {
             'name': selected_event['name'],
             'lat': selected_event['lat'],
-            'lng': selected_event['lng'],
+            'lon': selected_event['lng'],
             'address': selected_event['address']
         }
 
