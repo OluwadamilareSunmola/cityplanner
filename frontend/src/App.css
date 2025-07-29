@@ -144,25 +144,6 @@
   padding: 0px
 }
 
-.event-block h3 {
-  margin-left: 1.5rem;
-}
-
-
-.event-block p {
-  margin-left: 1.5rem;
-}
-
-.event-block ul p {
-  padding: 0px;
-  margin: 0px;
-  margin-left: 1.5rem;
-}
-
-.event-block button {
-  margin: 0 0 1rem 1.5rem;
-}
-
 .map-container {
   margin-left: 200px;
   height: 100vh;
@@ -231,8 +212,7 @@ p {
   margin: 0px;
 }
 
-.planer-data h2,
-h3 {
+.planer-data h2, .planer-data h3 {
   margin: 1rem 0rem;
 }
 
