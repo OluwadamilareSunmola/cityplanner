@@ -6,7 +6,7 @@ import Signup from './pages/Signup';
 import Map from './pages/Map';
 import Events from './pages/Events';
 import EventDetails from './pages/EventDetails';
-import CreatePlan from './pages/CreatePlan';
+
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
           <Route path="/map" element={<Map />} />
           <Route path="/events" element={<Events />} />
           <Route path="/details" element={<EventDetails/>} />
-          <Route path="/plan" element={<CreatePlan/>} />
+
         </Routes>
     </Router>
   );

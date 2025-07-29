@@ -155,17 +155,12 @@ function EventDetails() {
 
             <div className="flex gap-4 bottom-5 absolute">
               <button 
-                onClick={() => navigate('/plan', { state: { event, placesData  } })}
+                onClick={() => navigate('/events', { state: { event, placesData  } })}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold duration-200 transition-colors flex-1 cursor-pointer"
               >
-                Edit Event
+                Return
               </button>
-              <button 
-                onClick={() => navigate('/events')}
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold duration-200 transition-colors cursor-pointer"
-              >
-                Return to Events
-              </button>
+
             </div>
           </div>
         </div>
