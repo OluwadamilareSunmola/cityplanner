@@ -20,7 +20,7 @@ function PopUpComponent({ name, address, type }) {
     <Popup>
       <div className="pb-2">
         <h3 className="text-lg font-semibold text-gray-900 mb-6 pb-4">{name}</h3>
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-col gap-4">
 
               <div className="bg-purple-50 rounded-lg p-4 border border-purple-100 md:col-span-1">
                 <div className="flex items-center gap-3">
@@ -50,6 +50,8 @@ export default function MapComponent({ coordinates, eventData, placesData, zoom 
   if (!coordinates || coordinates.length !== 2) {
     coordinates = [40.7128, -74.0060]; // default to New York City if no coordinates provided
   }
+
+  console.log("placesData", placesData);
 
   return <>
     <MapContainer center={coordinates} zoom={zoom} style={{ height: '100%', width: '100%' }}>
@@ -81,15 +83,33 @@ export default function MapComponent({ coordinates, eventData, placesData, zoom 
         return null; // skip the event location itself
       }
 
+      let color;
+
+      if (place.properties.category === "catering") {
+        color = '#ffb52b';
+      } else if (place.properties.category === "entertainment") {
+        color = '#cf3e56';
+      } else if (place.properties.category === "building") {
+        color = '#95a5a6';
+      } else if (place.properties.category === "tourism") {
+        color = '#3498db';
+      } else if (place.properties.category === "highway") {
+        color = '#9c9c9c';
+      } else if (place.properties.category === "populated_place") {
+        color = '#9b59b6';
+      } else {
+        color = '#28a745'; // default color for other types
+      }
+
       return (
       <CircleMarker
         key={index}
         center={[place.geometry.coordinates[1], place.geometry.coordinates[0]]}
         radius={8}
         pathOptions={{ 
-          color: '#ff7800',
+          color: color,
           weight: 1,
-          fillColor: '#ff7800',
+          fillColor: color,
           fillOpacity: 0.6
         }}
       >
