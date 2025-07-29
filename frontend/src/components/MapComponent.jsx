@@ -15,6 +15,37 @@ function ChangeView({ center, zoom }) {
   return;
 }
 
+function PopUpComponent({ name, address, type }) {
+  return (
+    <Popup>
+      <div className="pb-2">
+        <h3 className="text-lg font-semibold text-gray-900 mb-6 pb-4">{name}</h3>
+        <div className="flex flex-row gap-4">
+
+              <div className="bg-purple-50 rounded-lg p-4 border border-purple-100 md:col-span-1">
+                <div className="flex items-center gap-3">
+                  <div>
+                    <div className="text-xs font-semibold text-purple-700 uppercase tracking-wide mb-1">Address</div>
+                    <div className="text-sm text-gray-900">{address}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-green-50 rounded-lg p-4 border border-green-100">
+                <div className="flex items-center gap-3">
+                  <div>
+                    <div className="text-xs font-semibold text-green-700 uppercase tracking-wide mb-1">Type</div>
+                    <div className="text-sm text-gray-900 uppercase">{type}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        </Popup>
+  );
+
+}
+
 export default function MapComponent({ coordinates, eventData, placesData, zoom = 13 }) {
   if (!coordinates || coordinates.length !== 2) {
     coordinates = [40.7128, -74.0060]; // default to New York City if no coordinates provided
@@ -41,18 +72,18 @@ export default function MapComponent({ coordinates, eventData, placesData, zoom 
           fillOpacity: 0.6
         }}
       >
-        <Popup>
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Event Location</h3>
-            <div className="text-sm text-gray-900">{coordinates.join(", ")}</div>
-          </div>
-        </Popup>
+        <PopUpComponent 
+          name={eventData.name}
+          address={eventData.address}
+          type={eventData.type}
+        /> 
       </CircleMarker>
 
     {placesData && placesData.places_data && placesData.places_data.features.map((place, index) => {
       if (coordinates[0] === place.geometry.coordinates[1] && coordinates[1] === place.geometry.coordinates[0]) {
         return null; // skip the event location itself
       }
+      console.log("Place: ", place);
 
       return (
       <CircleMarker
@@ -66,31 +97,11 @@ export default function MapComponent({ coordinates, eventData, placesData, zoom 
           fillOpacity: 0.6
         }}
       >
-        <Popup>
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">{place.properties.name}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-auto gap-4 mb-8">              
-
-              <div className="bg-purple-50 rounded-lg p-4 border border-purple-100 md:col-span-1">
-                <div className="flex items-center gap-3">
-                  <div>
-                    <div className="text-xs font-semibold text-purple-700 uppercase tracking-wide mb-1">Address</div>
-                    <div className="text-sm text-gray-900">{place.properties.address}</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-green-50 rounded-lg p-4 border border-green-100">
-                <div className="flex items-center gap-3">
-                  <div>
-                    <div className="text-xs font-semibold text-green-700 uppercase tracking-wide mb-1">Type</div>
-                    <div className="text-sm text-gray-900 uppercase">{place.properties.type}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-        </div>
-        </Popup>
+        <PopUpComponent 
+          name={place.properties.name}
+          address={place.properties.address}
+          type={place.properties.category || "Unknown"}
+        />
       </CircleMarker>
     )})}
     </MapContainer>
