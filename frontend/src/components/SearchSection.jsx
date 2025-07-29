@@ -27,7 +27,7 @@ export default function SearchSection({ filters, setFilters, title, subtitle }) 
                 value={filters.type}
                 onChange={(e) => setFilters({ ...filters, type: e.target.value })}
               >
-                <option value="">-- Select Type --</option>
+                <option value="">All Types</option>
                 <option value="Music">Music</option>
                 <option value="Sports">Sports</option>
                 <option value="Arts & Theater">Arts & Theatre</option>
