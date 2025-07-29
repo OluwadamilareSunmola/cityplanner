@@ -20,7 +20,7 @@ function PopUpComponent({ name, address, type }) {
     <Popup>
       <div className="pb-2">
         <h3 className="text-lg font-semibold text-gray-900 mb-6 pb-4">{name}</h3>
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-col gap-4">
 
               <div className="bg-purple-50 rounded-lg p-4 border border-purple-100 md:col-span-1">
                 <div className="flex items-center gap-3">
