@@ -52,8 +52,8 @@ function isInTimeRange(eventTime, selectedRange) {
 
 function Home() {
   const [events, setEvents] = useState({});
-  const [location, setLocation] = useState("El Paso"); // city used to fetch events
-  const [searchInput, setSearchInput] = useState("El Paso"); // controlled input value
+  const [location, setLocation] = useState(""); // city used to fetch events
+  const [searchInput, setSearchInput] = useState(""); // controlled input value
 
   const navigate = useNavigate();
 

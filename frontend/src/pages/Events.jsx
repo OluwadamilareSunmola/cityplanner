@@ -4,12 +4,56 @@ import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 import { getDocs, collection, doc, deleteDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-import SearchSection from "../components/SearchSection.jsx";
+import SearchSection from "../components/SearchSectionEvents.jsx";
 import EventsContainer from "../components/EventsContainer.jsx";
 
+function isInTimeRange(eventTime, selectedRange) {
+  if (!eventTime || selectedRange === "") return true;
+
+  const eventDate = new Date(eventTime);
+  const now = new Date();
+
+  if (isNaN(eventDate)) {
+    return true; // If invalid date, don't filter out
+  }
+
+  // Helper to add months safely
+  function addMonths(date, months) {
+    const d = new Date(date);
+    d.setMonth(d.getMonth() + months);
+    return d;
+  }
+
+  switch (selectedRange) {
+    case "thisWeek": {
+      // from now to 7 days later
+      const oneWeekFromNow = new Date(now);
+      oneWeekFromNow.setDate(now.getDate() + 7);
+      return eventDate >= now && eventDate <= oneWeekFromNow;
+    }
+    case "nextMonth": {
+      // from now to 1 month later
+      const oneMonthFromNow = addMonths(now, 1);
+      return eventDate >= now && eventDate <= oneMonthFromNow;
+    }
+    case "sixMonths": {
+      // from now to 6 months later
+      const sixMonthsFromNow = addMonths(now, 6);
+      return eventDate >= now && eventDate <= sixMonthsFromNow;
+    }
+    case "year": {
+      // from now to 12 months later
+      const oneYearFromNow = addMonths(now, 12);
+      return eventDate >= now && eventDate <= oneYearFromNow;
+    }
+    default:
+      return true;
+  }
+}
 function Events() {
   const [savedEvents, setSavedEvents] = useState({});
   const [events, setEvents] = useState({});
+  const [search, setSearch] = useState("")
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -98,10 +142,10 @@ function Events() {
         <SearchSection
           filters={filters}
           setFilters={setFilters}
-          title={"Saved Events"}
-          subtitle={"What if the moments you cherished were saved in the midst of your life?\n  \
-                    What if the events you once loved were closer than you thought?"}
-          />
+          title="Saved Events"
+          subtitle={`What if the moments you cherished were saved in the midst of your life?\nWhat if the events you once loved were closer than you thought?`}
+        />
+
 
         <EventsContainer filteredEvents={filteredEvents}>
           {(id, event, buttonClass) => (

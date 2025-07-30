@@ -98,11 +98,10 @@ function Login() {
       </form>
 
       <div className="info-login">
-        <p>
-          jaedfjkeafjkwjrkaJKEAJDGM K ADJFJAFJJKASDJKJKF
-          JAKEFAJRNJAERKASKARKKJRA KJA KSNJASNFAKFKJAFKJ EQKJRA EKJKAK FFASZCX
+        <p className="width-[80%]">
+          From concerts and street fairs to hidden gems and local favorites, CityPulse helps you explore, organize, and experience the events that make every city come alive. Whether you're planning a night out or just discovering what's nearby, your next adventure starts here.
         </p>
-        <img src="https://media.streets.mn/wp-content/uploads/2013/10/Screen-shot-2013-10-27-at-10.51.49-PM-500x288.png" alt="Info" />
+        <img src="../../public/map.png" alt="Info" />
       </div>
     </div>
   );
